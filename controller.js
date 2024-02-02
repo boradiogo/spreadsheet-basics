@@ -8,21 +8,21 @@ function calcAverage(grades) {
     grades.reduce((sum, grade) => sum + Number(grade), 0) / grades.length / 10)
 }
 
-function checkAttendance(attendance) {
-  return (attendance / 60) * 100 > 25 ? true: false
+function checkAttendance(absence) {
+  return (absence / 60) * 100 > 25 ? true: false
 }
 
-function checkApproval(average, attendance) {
-  const hasLackOfAttendance = checkAttendance(attendance)
+function checkApproval(average, absence) {
+  const hasLackOfAttendance = checkAttendance(absence)
   const isApproved = average >= 7 ? true : false 
   const isNotApprovedYet = !isApproved
-  const secondChange = average >= 5 && isNotApprovedYet ? true : false
-  const gradeToBeApproved = secondChange ? 7 * 2 - average : 0
+  const secondChance = average >= 5 && isNotApprovedYet ? true : false
+  const gradeToBeApproved = secondChance ? 7 * 2 - average : 0
 
   return {
     hasLackOfAttendance,
     isApproved: false,
-    secondChange,
+    secondChance,
     gradeToBeApproved
   }
 }
@@ -31,14 +31,14 @@ export async function getStudents() {
   const rows = await readSpreadsheet(spreadsheetId, range)  
 
   const students = rows.map((row) => {
-    const [id, name, attendance, ...grades] = row
+    const [id, name, absence, ...grades] = row
     const average = calcAverage(grades)
-    const status = checkApproval(average, attendance)
+    const status = checkApproval(average, absence)
     
     return {
       id,
       name,
-      attendance,
+      absence,
       grades,
       average,
       status
