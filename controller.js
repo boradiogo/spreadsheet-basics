@@ -9,19 +9,22 @@ function calcAverage(grades) {
 }
 
 function checkAttendance(absence) {
-  return (absence / 60) * 100 > 25 ? true: false
+  const numberOfClasses = 60
+  const absenceThresholdPercentage = 25
+  return (absence / numberOfClasses) * 100 > absenceThresholdPercentage ? true: false
 }
 
 function checkApproval(average, absence) {
   const hasLackOfAttendance = checkAttendance(absence)
-  const isApproved = average >= 7 ? true : false 
+  const regularAttendee = !hasLackOfAttendance
+  const isApproved = average >= 7 && regularAttendee ? true : false 
   const isNotApprovedYet = !isApproved
-  const secondChance = average >= 5 && isNotApprovedYet ? true : false
+  const secondChance = average >= 5 && isNotApprovedYet && regularAttendee ? true : false
   const gradeToBeApproved = secondChance ? 7 * 2 - average : 0
 
   return {
     hasLackOfAttendance,
-    isApproved: false,
+    isApproved,
     secondChance,
     gradeToBeApproved
   }
