@@ -12,3 +12,24 @@ export async function readSpreadsheet(spreadsheetId, range) {
 
   return result.data.values
 }
+
+export async function updateSpreadsheet(spreadsheetId, range, valueInputOption, _values) {
+  const auth = await authorize()
+  const service = google.sheets({version: 'v4', auth})
+
+  const data = [
+    {
+      range,
+      values: _values,
+    },
+  ]
+
+  var resource = {
+      valueInputOption,
+      data,
+  };
+    const result = service.spreadsheets.values.batchUpdate({spreadsheetId, resource});
+
+    return result
+}
+
